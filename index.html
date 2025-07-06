@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .calculator {
+    background-color: white;: #333;
+    padding: 20px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 0 20px #000;
+  }
+
+  .display {
+    background: #000;
+    color: #0f0;
+    height: 70px;
+    text-align: right;
+    padding: 20px;
+    font-size: 3.0em;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+  }
+
+  .buttons button {
+    width: 70px;
+    height: 50px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    background: #555;
+    color: #fff;
+    transition: background 0.2s;
+  }
+
+  .buttons button:hover {
+    background: #777;
+  }
+
+  .buttons .operator {
+    background: #ff9500;
+    color: #000;
+  }
+
+  .buttons .operator:hover {
+    background: #ffa733;
+  }
+
+  .buttons .equal {
+    background: #28a745;
+  }
+
+  .buttons .equal:hover {
+    background: #43c768;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+  <div class="calculator">
+    <div id="result" class="display">0</div>
+    <div class="buttons">
+      <button onclick="clearResult()">C</button>
+      <button onclick="backspace()">←</button>
+      <button onclick="append('(')">(</button>
+      <button onclick="append(')')">)</button>
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button class="operator" onclick="append('/')">÷</button>
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button class="operator" onclick="append('*')">×</button>
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button class="operator" onclick="append('-')">−</button>
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
+      <button class="operator" onclick="append('+')">+</button>
+      <button onclick="appendFunc('sin')">sin</button>
+      <button onclick="appendFunc('cos')">cos</button>
+      <button onclick="appendFunc('tan')">tan</button>
+      <button onclick="appendFunc('sqrt')">√</button>
+      <button onclick="appendFunc('ln')">ln</button>
+      <button onclick="appendFunc('exp')">eˣ</button>
+      <button onclick="append('**')">^</button>
+      <button onclick="append('%')">%</button>
+    </div>
+  </div>
+
+<script>
+let expression = '';
+
+function updateDisplay() {
+  document.getElementById('result').innerText = expression || '0';
+}
+
+function append(char) {
+  expression += char;
+  updateDisplay();
+}
+
+function appendFunc(func) {
+  if(func === '√') {
+    expression += 'sqrt(';
+  } else if(func === 'ln') {
+    expression += 'ln(';
+  } else if(func === 'eˣ') {
+    expression += 'exp(';
+  } else {
+    expression += func + '(';
+  }
+  updateDisplay();
+}
+
+function clearResult() {
+  expression = '';
+  updateDisplay();
+}
+
+function backspace() {
+  expression = expression.slice(0, -1);
+  updateDisplay();
+}
+
+function calculate() {
+  try {
+    // Replace function names with Math. functions before evaluating
+    let expr = expression
+      .replace(/sin/g, 'Math.sin')
+      .replace(/cos/g, 'Math.cos')
+      .replace(/tan/g, 'Math.tan')
+      .replace(/sqrt/g, 'Math.sqrt')
+      .replace(/ln/g, 'Math.log')
+      .replace(/exp/g, 'Math.exp');
+    let result = eval(expr);
+    expression = result.toString();
+  } catch (e) {
+    expression = 'Error';
+  }
+  updateDisplay();
+}
+</script>
+</body>
+</html>
